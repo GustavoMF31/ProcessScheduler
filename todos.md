@@ -1,4 +1,4 @@
-## Interação com o Usuário
+# Interação com o Usuário
 - CSV de entrada:
   - Definição do formato (colunas)
   - Leitura do arquivo (produzindo o EventLog inicial)
