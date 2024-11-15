@@ -1,7 +1,7 @@
 # Interação com o Usuário
 - CSV de entrada:
   - Definição do formato (colunas)
-  - Leitura do arquivo (produzindo o EventLog inicial)
+  - Leitura do arquivo (produzindo a EventQueue inicial)
 
 - Parâmetros do timestamp (quantum) como command line argument
 - Tempo de duração de cada tipo de IO como command line argument
@@ -24,7 +24,7 @@ A saída alterna entre print do estado atual das filas e processo em execução 
 
 - Estrutura de dados de fila de processos
 - Estrutura de dados do evento
-- Estrutura de dados do EventLog
+- Estrutura de dados da EventQueue
 
 - Associação da quantidade de tempo que demora cada IO
 
@@ -42,10 +42,10 @@ A saída alterna entre print do estado atual das filas e processo em execução 
 
 - Loop de escalonamento
   - (De u.t. em u.t)
-  - Reagir ao próximo evento (EventLog) e às necessidades do processo em execução
-    - A função de escalonar recebe uma referência ao estado atual, incluindo o EventLog (que vai ser alterado por mutação) e retorna uma lista de ações que foram realizadas
+  - Reagir ao próximo evento (da EventQueue) e às necessidades do processo em execução
+    - A função de escalonar recebe uma referência ao estado atual, incluindo a EventQueue (que vai ser alterada por mutação) e retorna uma lista de ações que foram realizadas
     - O loop de execução vai depois printar cada ação que foi realizada
-  - Lista (ordenada no tempo) de eventos (aka EventLog):
+  - Lista (ordenada no tempo) de eventos (aka EventQueue):
     - Chegada de um programa (Carrega os dados do programa)
       - Ao entrar, o programa recebe o próximo PID em ordem sequencial
     - Hora de preemptar (Carrega o PID e o número da vez execução desse processo)
