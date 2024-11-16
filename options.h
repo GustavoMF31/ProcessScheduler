@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
-#include "event.h"
+#include "process.h"
 
 typedef struct {
   // How long is each time slice, i.e, how much time is given to each process to

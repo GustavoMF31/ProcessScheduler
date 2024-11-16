@@ -46,12 +46,12 @@ bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
 }
 
 // Returns how long an IO operation of a specific type takes, according
-// to the passed SchedulingOptions
+// to the passed SchedulingOptions. Assumes io != None.
 int getIODuration(SchedulingOptions opt, IOType io){
   switch (io) {
     case PRINTER: return opt.printerTime;
     case DISK: return opt.diskTime;
-    case MAGNETIC_TAPE: return opt.tapeTime;
+    case TAPE: return opt.tapeTime;
     default:
       printf("Invalid IOType passed to getIODuration\n");
       exit(1);

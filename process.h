@@ -6,10 +6,10 @@
 
 // Device types of the I/O requests
 typedef enum {
-  None = 0, 
-  Disk = 1,
-  Tape = 2,
-  Printer = 3
+  NONE = 0,
+  DISK = 1,
+  TAPE = 2,
+  PRINTER = 3
 } IOType;
 
 // Elemental particle of a process:

@@ -1,6 +1,6 @@
 #pragma once
 
-typedef enum { PRINTER, DISK, MAGNETIC_TAPE } IOType;
+#include "process.h"
 
 typedef enum {
   NEW_PROCESS,
@@ -15,10 +15,7 @@ typedef struct _Event {
   EventType type;
 
   // Fields for type NEW_PROCESS:
-
-  // Holds the data for each action (computing time and IO time/IO type) the process is going to take
-  // TODO: Code the data structure for the type of this field
-  // ?? *processActions,
+  Process* newProcess;
 
   // Fields for type TIME_SLICE_FINISHED:
 
@@ -40,5 +37,6 @@ typedef struct _Event {
   IOType ioType;
 } Event;
 
+Event newProcess(Process *p);
 Event timeSliceFinished(int pid, int timeSlicesUsed);
 Event ioFinished(int pid, IOType type);
