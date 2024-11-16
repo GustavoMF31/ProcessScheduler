@@ -24,10 +24,10 @@ Event timeSliceFinished(int pid, int timeSlicesUsed){
   return e;
 }
 
-Event ioFinished(int pid, IOType type){
+Event ioFinished(Process *p, IOType type){
   Event e;
   e.type = IO_FINISHED;
-  e.blockedProcess = pid;
+  e.blockedProcess = p;
   e.ioType = type;
 
   return e;

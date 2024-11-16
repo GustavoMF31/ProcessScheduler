@@ -29,8 +29,8 @@ typedef struct _Event {
 
   // Fields for type IO_FINISHED:
 
-  // The process ID of the process that was blocked by the execution of IO
-  int blockedProcess;
+  // The process that was blocked by an IO request
+  Process* blockedProcess;
 
   /* The type of IO that has ended. Used to make sure the process returns to the process queue
      of the right priority */
@@ -39,4 +39,4 @@ typedef struct _Event {
 
 Event newProcess(Process *p);
 Event timeSliceFinished(int pid, int timeSlicesUsed);
-Event ioFinished(int pid, IOType type);
+Event ioFinished(Process *p, IOType type);

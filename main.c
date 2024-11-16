@@ -4,15 +4,17 @@
 #include "eventqueue.h"
 #include "options.h"
 #include "process.h"
+#include "scheduler.h"
 
 // Quickly test some of the implemented functionality
 void testQueue(){
   EventQueue* e = initEventQueue();
 
-  insertIntoEventQueue(e, ioFinished(1, DISK), 20);
+  Process *p = createEmptyProcess(5, "Test");
+  insertIntoEventQueue(e, ioFinished(p, DISK), 20);
   insertIntoEventQueue(e, timeSliceFinished(2, 1), 10);
 
-  printf("IO: %d\n", e->firstEvent->event.blockedProcess);
+  printf("IO: %d\n", e->firstEvent->event.blockedProcess->PID);
   printf("TimeSlice: %d\n", e->firstEvent->nextEvent->event.processToPreempt);
 }
 
@@ -55,13 +57,14 @@ int main(int argc, char** argv){
     return 1;
   }
 
-  Process *p1 = e->firstEvent->event.newProcess;
-  Process *p2 = e->firstEvent->nextEvent->event.newProcess;
-  Process *p3 = e->firstEvent->nextEvent->nextEvent->event.newProcess;
-
-  displayProcess(p1);
-  displayProcess(p2);
-  displayProcess(p3);
+  bool done = false;
+  int time = 0;
+  SchedulerState state = initialState(e);
+  while (!done) {
+    done = schedulingStep(state, opt, time);
+    time++;
+    printf("step\n");
+  }
 
   return 0;
 }

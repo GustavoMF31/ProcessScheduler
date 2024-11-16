@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 // Process handling library 
 
 // Data structures ----------------------------------------------------------------------
@@ -38,6 +40,11 @@ typedef struct ProcessQueue {
   QueueNode* head;
 } ProcessQueue;
 
+
+// Returns whether a process that requested a specific kind of IO
+// should return to the high priority queue. Assumes type != NONE,
+// as a "NONE" IO cannot be requested.
+bool hasPriority(IOType type);
 
 // Process handling functions -----------------------------------------------------------
 
@@ -79,4 +86,3 @@ void displayProcess(Process* process);
 
 // Displays all the processes in a process queue
 void displayProcessQueue(ProcessQueue* queue);
-

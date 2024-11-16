@@ -26,6 +26,20 @@ void insertIntoEventQueue(EventQueue* curEventQueue, Event event, int time) {
   *aux = newEvent;
 }
 
+bool nextEvent(Event *event, int *time, EventQueue *queue){
+  if (queue->firstEvent == NULL) return false;
+  *event = queue->firstEvent->event;
+  *time = queue->firstEvent->eventTime;
+  return true;
+}
+
+void dropEvent(EventQueue* queue){
+  if (queue->firstEvent == NULL) return;
+  CurrentEvent *event = queue->firstEvent;
+  queue->firstEvent = event->nextEvent;
+  free(event);
+}
+
 // Reads a line of input in "buffer" and parses it, reading the process entry time
 // (written to *entryTime), separated by a colon from a comma-separated list of integers
 // corresponding to cpu times and IO types (PRINTER, TAPE, or DISK),

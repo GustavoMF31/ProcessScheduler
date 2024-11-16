@@ -1,7 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 #include "process.h"
+
+bool hasPriority(IOType type){
+  switch (type) {
+    case TAPE: return true;
+    case DISK: return false;
+    case PRINTER: return true;
+    default:
+      printf("Invalid IOType passed to hasPriority\n");
+      exit(1);
+  }
+}
 
 Process* createEmptyProcess(int PID, char* name)  {
   Process* newProcess = malloc(sizeof(Process));
