@@ -26,11 +26,23 @@ void insertIntoEventQueue(EventQueue* curEventQueue, Event event, int time) {
   *aux = newEvent;
 }
 
-// Reads a line of input in "buffer" and parses it, reading comma-separated
-// integers corresponding to cpu times and IO types (PRINTER, TAPE, or
-// DISK), building a chain of ProcessNodes that is written to "node".
-bool parseNodes(char* buffer, ProcessNode** node){
+// Reads a line of input in "buffer" and parses it, reading the process entry time
+// (written to *entryTime), separated by a colon from a comma-separated list of integers
+// corresponding to cpu times and IO types (PRINTER, TAPE, or DISK),
+// building a chain of ProcessNodes that is written to "node".
+bool parseNodes(char* buffer, int* entryTime, ProcessNode** node){
 
+  // First read the process entry time, which is separated from the rest
+  // of the values with a colon
+  int n; // Number of characters read
+  if (sscanf(buffer, "%d%n", entryTime, &n) != 1) return false;
+  buffer += n;
+  while (buffer[0] == ' ') buffer++; // Skip whitespace
+  if (buffer[0] != ':') return false;
+  buffer++;
+  while (buffer[0] == ' ') buffer++; // Skip whitespace
+
+  // Then read the list of CPU/IO actions the process
   while (true){
     // Skip whitespace
     while (buffer[0] == ' ') buffer++;
@@ -105,14 +117,16 @@ bool newProcessEventsFromFile(FILE* file, EventQueue* e){
     // Attempt to read a line (NULL indicates EOF)
     if (fgets(text_buffer, MAX_LINE_LENGTH, file) == NULL) break;
 
-    // TODO: Read name from file
+    // TODO: Read name from file, if we collectively decide to use
+    // process names (and not just PIDs)
     Process *p = createEmptyProcess(nextPid++, "A");
 
-    bool ok = parseNodes(text_buffer, &p->firstNode);
+    // Parse ProcessNode chain, as well as the process entry time
+    int entryTime;
+    bool ok = parseNodes(text_buffer, &entryTime, &p->firstNode);
     if (!ok) return false;
 
-    // TODO: Read the process entry time from the file
-    insertIntoEventQueue(e, newProcess(p), 5);
+    insertIntoEventQueue(e, newProcess(p), entryTime);
   }
 
   return true;
