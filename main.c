@@ -26,24 +26,32 @@ void dumpOptions(SchedulingOptions opt){
 }
 
 int main(int argc, char** argv){
+  if (argc <= 1){
+    printf("Error: process data file should be passed as the first argument\n");
+    return 1;
+  }
+
+  char* processDataFile = argv[1];
+
   SchedulingOptions opt;
-  if (!parseArgs(&opt, argc, argv)){
+  // Skip the program name and the file name when looking for
+  // scheduling options
+  if (!parseArgs(&opt, argc-2, argv+2)){
     printf("Invalid command line arguments\n");
     return 1;
   }
 
   // Test reading the process data from a csv file
-  // TODO: Get file name from the command line
-  FILE* file = fopen("new_process_data.csv", "r");
+  FILE* file = fopen(processDataFile, "r");
   if (file == NULL){
-    printf("Could not find file with process data\n");
+    printf("Could not open file %s\n", processDataFile);
     return 1;
   }
 
   EventQueue* e = initEventQueue();
   bool ok = newProcessEventsFromFile(file, e);
   if (!ok){
-    printf("Failed to read processes from file\n");
+    printf("Could not parse processes from file\n");
     return 1;
   }
 

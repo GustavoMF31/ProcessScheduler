@@ -7,7 +7,7 @@
 #include "event.h"
 
 // Attempts to read a positive integer from argv at index i+1, preceeded by the argument name argName.
-// Returns true if succeeded, writing the result to *dest, and false otherwise,
+// Returns true if succeeded, writing the result to *dest, and false otherwise.
 bool readArg(char* argName, int* dest, int argc, char** argv, int i){
 
   // If the argName does not match or we have run out of input, return false
@@ -19,7 +19,7 @@ bool readArg(char* argName, int* dest, int argc, char** argv, int i){
 }
 
 // Reads the scheduling options from the command line arguments and writes them
-// into *opt. Returns true upon success and false otherwise
+// into *opt. Returns true upon success and false otherwise.
 bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
 
   // Set default values for the options
@@ -29,8 +29,8 @@ bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
   opt->tapeTime = 30;
   opt->printerTime = 40;
 
-  // Start at i = 1 to skip the program name
-  for (int i = 1; i < argc; i += 2){
+  // Iterate over the arguments pairwise, expecing "--option value" pairs
+  for (int i = 0; i < argc; i += 2){
     bool ok = false;
 
     ok = ok || readArg("--time"   , &opt->timeSlice  , argc, argv, i);
