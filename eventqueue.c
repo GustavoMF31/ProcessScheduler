@@ -45,6 +45,9 @@ bool parseNodes(char* buffer, ProcessNode** node){
     if (read != 1) cpuTime = 0;
     else buffer += charsRead;
 
+    // cpuTime must be non-negative
+    if (cpuTime < 0) return false;
+
     if (buffer[0] == ','){
       buffer++;
       // Skip whitespace
