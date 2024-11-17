@@ -15,13 +15,13 @@ void insertIntoEventQueue(EventQueue* curEventQueue, Event event, int time) {
   newEvent->event = event;
   newEvent->eventTime = time;
 
-  // TODO: Ensure that, when two events happen to have the same eventTime,
-  // they are inserted in the EventQueue in the correct order according to
-  // some fixed tie-breaking criteria
   CurrentEvent** aux = &curEventQueue->firstEvent;
-  while (*aux != NULL && (*aux)->eventTime < time) {
+
+  while (*aux != NULL && ((*aux)->eventTime < time ||
+        ((*aux)->eventTime == time && compareEvent((*aux)->event, event)))) {
     aux = &(*aux)->nextEvent;
   }
+
   newEvent->nextEvent = *aux;
   *aux = newEvent;
 }
@@ -84,8 +84,9 @@ bool parseNodes(char* buffer, int* entryTime, ProcessNode** node){
     char* c = strchr(buffer, ',');
     if (c == NULL) c = strchr(buffer, '\n');
 
-    // TODO: Think about how we would like to handle whitespace
-    // at the end of a line
+    char* nextSpace = strchr(buffer, ' ');
+    if (nextSpace != NULL && nextSpace < c) c = nextSpace;
+
     int n = c - buffer; // Distance to the comma
     if (n == 0){
       type = NONE;
@@ -100,6 +101,9 @@ bool parseNodes(char* buffer, int* entryTime, ProcessNode** node){
       printf("Could not read IO type\n");
       return false;
     }
+
+    // Skip whitespace
+    while (buffer[0] == ' ') buffer++;
 
     // Add node to chain
     *node = malloc(sizeof(ProcessNode));
@@ -131,9 +135,7 @@ bool newProcessEventsFromFile(FILE* file, EventQueue* e){
     // Attempt to read a line (NULL indicates EOF)
     if (fgets(text_buffer, MAX_LINE_LENGTH, file) == NULL) break;
 
-    // TODO: Read name from file, if we collectively decide to use
-    // process names (and not just PIDs)
-    Process *p = createEmptyProcess(nextPid++, "A");
+    Process *p = createEmptyProcess(nextPid++);
 
     // Parse ProcessNode chain, as well as the process entry time
     int entryTime;

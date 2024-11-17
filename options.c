@@ -23,11 +23,10 @@ bool readArg(char* argName, int* dest, int argc, char** argv, int i){
 bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
 
   // Set default values for the options
-  // TODO: Collectively agree on what are some sensible values
-  opt->timeSlice = 10;
-  opt->diskTime = 20;
-  opt->tapeTime = 30;
-  opt->printerTime = 40;
+  opt->timeSlice = 5;
+  opt->diskTime = 4;
+  opt->tapeTime = 7;
+  opt->printerTime = 9;
 
   // Iterate over the arguments pairwise, expecing "--option value" pairs
   for (int i = 0; i < argc; i += 2){

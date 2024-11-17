@@ -2,10 +2,11 @@
 
 #include "process.h"
 
+// Event types, ordered according to tie-breaking priority
 typedef enum {
   NEW_PROCESS,
-  TIME_SLICE_FINISHED,
-  IO_FINISHED
+  IO_FINISHED,
+  TIME_SLICE_FINISHED
 } EventType;
 
 // Temporal events the scheduler has to keep track of
@@ -40,3 +41,10 @@ typedef struct _Event {
 Event newProcess(Process *p);
 Event timeSliceFinished(int pid, int timeSlicesUsed);
 Event ioFinished(Process *p, IOType type);
+
+// Returns true if e1 should come before e2 in case of a tie in time
+bool compareEvent(Event e1, Event e2);
+
+// Returns whether events of type t1 have priority over events of type
+// t2 in case of a tie on event time
+bool compareEventType(EventType t1, EventType t2);

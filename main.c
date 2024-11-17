@@ -10,7 +10,7 @@
 void testQueue(){
   EventQueue* e = initEventQueue();
 
-  Process *p = createEmptyProcess(5, "Test");
+  Process *p = createEmptyProcess(5);
   insertIntoEventQueue(e, ioFinished(p, DISK), 20);
   insertIntoEventQueue(e, timeSliceFinished(2, 1), 10);
 
@@ -27,6 +27,7 @@ void dumpOptions(SchedulingOptions opt){
   printf("Printer time: %d\n", getIODuration(opt, PRINTER));
 }
 
+// TODO: Ensure all malloc'd memory is properly freed
 int main(int argc, char** argv){
   if (argc <= 1){
     printf("Error: process data file should be passed as the first argument\n");
@@ -61,10 +62,10 @@ int main(int argc, char** argv){
   int time = 0;
   SchedulerState state = initialState(e);
   while (!done) {
-    done = schedulingStep(state, opt, time);
+    done = schedulingStep(&state, opt, time);
     time++;
-    printf("step\n");
   }
 
+  // printf("Scheduling done in %d units of time\n", time);
   return 0;
 }

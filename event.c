@@ -32,3 +32,24 @@ Event ioFinished(Process *p, IOType type){
 
   return e;
 }
+
+bool compareEvent(Event e1, Event e2){
+  if (e1.type != e2.type) return compareEventType(e1.type, e2.type);
+  switch (e1.type) {
+    case NEW_PROCESS: return e1.newProcess->PID < e2.newProcess->PID;
+    case IO_FINISHED: return e1.blockedProcess->PID < e2.blockedProcess->PID;
+
+    // Ordering among TIME_SLICE_FINISHED events turns out not to matter for
+    // purposes of scheduling
+    case TIME_SLICE_FINISHED: return true;
+    default:
+      printf("Invalid event types in compareEvent\n");
+      exit(1);
+  }
+}
+
+bool compareEventType(EventType t1, EventType t2){
+  // Here we use the fact that in the enum declaration, the types
+  // are ordered according to tie-breaking priority
+  return t1 < t2;
+}

@@ -5,7 +5,7 @@
 // Testing functionalities 
 int main() {
 
-  Process* p = createEmptyProcess(1, "processinho");
+  Process* p = createEmptyProcess(1);
   displayProcess(p);
   addProcessNode(p, 12, Printer);
   displayProcess(p);
@@ -19,7 +19,7 @@ int main() {
   enQueueProcess(p, q);
   printf("\n processo p na fila\n");
   displayProcessQueue(q);
-  Process* p2 = createEmptyProcess(3, "banana process");
+  Process* p2 = createEmptyProcess(3);
   addProcessNode(p2, 0, Tape);
   addProcessNode(p2, 10, Disk);
   addProcessNode(p2, 5, None);

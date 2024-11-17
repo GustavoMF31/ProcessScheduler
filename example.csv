@@ -1,0 +1,5 @@
+0: 4, TAPE, 9
+4: 2, PRINTER, 4, TAPE, 5
+5: 7
+7: 8
+10: 2, TAPE, 5, PRINTER, 9

@@ -16,13 +16,24 @@ bool hasPriority(IOType type){
   }
 }
 
-Process* createEmptyProcess(int PID, char* name)  {
+char* ioNameAsString(IOType type){
+  switch (type) {
+    case NONE: return "NONE";
+    case DISK: return "DISK";
+    case TAPE: return "TAPE";
+    case PRINTER: return "PRINTER";
+    default:
+      printf("Invalid IOType passed to ioNameAsString\n");
+      exit(1);
+  }
+}
+
+Process* createEmptyProcess(int PID)  {
   Process* newProcess = malloc(sizeof(Process));
   if (newProcess == NULL) return NULL;
 
   newProcess->PID = PID;
-  newProcess-> processName = malloc(strlen(name) * sizeof(char));
-  strcpy(newProcess->processName, name);
+  newProcess->timeSlicesUsed = 0;
   newProcess->firstNode = NULL; 
   return newProcess;
 }
@@ -97,7 +108,7 @@ void displayProcessNode(ProcessNode* node) {
 }
 
 void displayProcess(Process* process) {
-  printf("\nPID: %d\nName: %s\n[", process->PID, process->processName);
+  printf("\nPID: %d\n[", process->PID);
   ProcessNode* currentNode = process->firstNode;
   while (currentNode != NULL) {
     displayProcessNode(currentNode);

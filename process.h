@@ -22,10 +22,11 @@ typedef struct ProcessNode {
   struct ProcessNode* nextNode;
 } ProcessNode;
 
-// Process ID, name and pointer to the first node of the chain
+// Process ID and pointer to the first node of the chain, as well as how
+// many time slices it has used so far
 typedef struct Process {
   int PID;
-  char* processName;
+  int timeSlicesUsed;
   ProcessNode* firstNode;
 } Process;
 
@@ -46,6 +47,9 @@ typedef struct ProcessQueue {
 // as a "NONE" IO cannot be requested.
 bool hasPriority(IOType type);
 
+// Spells out the display name for each IOType
+char* ioNameAsString(IOType type);
+
 // Process handling functions -----------------------------------------------------------
 
 // Adds a new node to a process and returns:
@@ -58,7 +62,7 @@ int addProcessNode(Process *process, int CPUTime, IOType IORequest);
 // Creates an empty process with given PID and name and returns:
 // NULL if an error occurred
 // a pointer to the new process otherwise
-Process* createEmptyProcess(int PID, char* name); 
+Process* createEmptyProcess(int PID); 
 
 // Creates an empty process queue and returns:
 // NULL if an error occurred
