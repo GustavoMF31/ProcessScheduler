@@ -12,6 +12,7 @@ typedef struct {
   int printerTime;
   int diskTime;
   int tapeTime;
+  bool showSteps;
 } SchedulingOptions;
 
 bool parseArgs(SchedulingOptions* opt, int argc, char** argv);

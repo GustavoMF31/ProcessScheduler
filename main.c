@@ -63,11 +63,9 @@ int main(int argc, char** argv){
   bool done = false;
   int time = 0;
   SchedulerState state = initialState(e);
-  //TODO: Add this option to command line argument logic
-  bool displayStatesOption = true;
   while (!done) {
     done = schedulingStep(&state, opt, time);
-    if (displayStatesOption) {
+    if (opt.showSteps) {
       displaySchedulerState(&state, time);
       printf("\n     [Press any key to continue]\n");
       getc(stdin);

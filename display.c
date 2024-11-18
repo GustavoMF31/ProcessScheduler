@@ -91,6 +91,7 @@ void displayIOList(IOType io, SchedulerState* state, int currentTime) {
     if (currentNode->event.type == IO_FINISHED && currentNode->event.ioType == io && currentNode->eventTime > currentTime) {
       printf("     ");
       displayProcess(currentNode->event.blockedProcess);
+      printf("     Remaining time: %d", currentNode->eventTime - currentTime);
       printf("\n\n");
       isEmpty = false;
     } 

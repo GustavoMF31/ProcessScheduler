@@ -7,16 +7,23 @@
 #include "event.h"
 
 // Attempts to read a positive integer from argv at index i+1, preceeded by the argument name argName.
-// Returns true if succeeded, writing the result to *dest, and false otherwise.
-bool readArg(char* argName, int* dest, int argc, char** argv, int i){
+// Returns the number of read arguments if succeeded, writing the result to *dest, and 0 otherwise.
+int readPosIntArg(char* argName, int* dest, int argc, char** argv, int i){
 
   // If the argName does not match or we have run out of input, return false
-  if (strcmp(argv[i], argName) != 0) return false;
-  if (i == argc-1) return false;
+  if (strcmp(argv[i], argName) != 0) return 0;
+  if (i == argc-1) return 0;
 
   // Perform the reading otherwise
-  return sscanf(argv[i+1], "%d", dest) == 1 && *dest > 0;
+  if (sscanf(argv[i+1], "%d", dest) == 1 && *dest > 0) return 2;
+  else return 0;
 }
+
+// Attemps to read a specific argument name from the i-th position of argv.
+// Returns whether the argument read matches the wanted argument (1 or 0).
+int readBoolArg(char* argName, bool* dest, int argc, char** argv, int i) {
+  return *dest = strcmp(argv[i], argName) == 0;
+} 
 
 // Reads the scheduling options from the command line arguments and writes them
 // into *opt. Returns true upon success and false otherwise.
@@ -27,18 +34,20 @@ bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
   opt->diskTime = 4;
   opt->tapeTime = 7;
   opt->printerTime = 9;
+  opt->showSteps = false;
 
-  // Iterate over the arguments pairwise, expecing "--option value" pairs
-  for (int i = 0; i < argc; i += 2){
-    bool ok = false;
+  // Iterate over the arguments, expecting "--option value" or "--option" 
+  for (int i = 0; i < argc;){
 
-    ok = ok || readArg("--time"   , &opt->timeSlice  , argc, argv, i);
-    ok = ok || readArg("--disk"   , &opt->diskTime   , argc, argv, i);
-    ok = ok || readArg("--tape"   , &opt->tapeTime   , argc, argv, i);
-    ok = ok || readArg("--printer", &opt->printerTime, argc, argv, i);
+    int j = i; 
 
-    // In case of an unrecognized argument, return false;
-    if (!ok) return false;
+    i += readPosIntArg("--time"   , &opt->timeSlice  , argc, argv, i);
+    i += readPosIntArg("--disk"   , &opt->diskTime   , argc, argv, i); 
+    i += readPosIntArg("--tape"   , &opt->tapeTime   , argc, argv, i); 
+    i += readPosIntArg("--printer", &opt->printerTime, argc, argv, i);
+    i +=   readBoolArg("--steps"  , &opt->showSteps  , argc, argv, i); 
+
+    if (i == j) return false;
   }
 
   return true;
