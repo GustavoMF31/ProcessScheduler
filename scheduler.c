@@ -51,10 +51,24 @@ bool stepProcessExecution(SchedulerState *state, SchedulingOptions opt, int time
     insertIntoEventQueue(state->eventQueue, e, time + getIODuration(opt, io));
 
     // Advance the process node chain, so that we start from the
-    // next node when this process returns from IO
+    // next node when this process returns from IO and free abandoned node
+    ProcessNode* previousNode = state->executing->firstNode; 
     state->executing->firstNode = state->executing->firstNode->nextNode;
+    free(previousNode);
   } else {
     printf("Process %d has finished execution\n", state->executing->PID);
+
+    // In case o a process finishing its execution, make sure
+    // any remaining node is free and, finally, free the process per se
+    Process* finishedProcess = state->executing;
+    ProcessNode* currentNode = NULL;
+    ProcessNode* nextNode = finishedProcess->firstNode;
+    while (nextNode != NULL) {
+      currentNode = nextNode;
+      nextNode = nextNode->nextNode;
+      free(currentNode);
+    }
+    free(finishedProcess);
   }
 
   // Now we try to bring the next process to execute

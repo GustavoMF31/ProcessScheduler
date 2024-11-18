@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "event.h"
 #include "eventqueue.h"
@@ -28,7 +29,6 @@ void dumpOptions(SchedulingOptions opt){
   printf("Printer time: %d\n", getIODuration(opt, PRINTER));
 }
 
-// TODO: Ensure all malloc'd memory is properly freed
 int main(int argc, char** argv){
   if (argc <= 1){
     printf("Error: process data file should be passed as the first argument\n");
@@ -58,21 +58,27 @@ int main(int argc, char** argv){
     printf("Could not parse processes from file\n");
     return 1;
   }
+  fclose(file);
 
   bool done = false;
   int time = 0;
   SchedulerState state = initialState(e);
   //TODO: Add this option to command line argument logic
-  bool displayStatesOption = 1;
+  bool displayStatesOption = true;
   while (!done) {
     done = schedulingStep(&state, opt, time);
     if (displayStatesOption) {
       displaySchedulerState(&state, time);
       printf("\n     [Press any key to continue]\n");
       getc(stdin);
-      time++;
     }
+    time++;
   }
+
+  // Free event queue and process queues
+  free(e);
+  free(state.highPriority);
+  free(state.lowPriority);
 
   // printf("Scheduling done in %d units of time\n", time);
   return 0;
