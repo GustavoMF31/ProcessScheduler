@@ -19,7 +19,7 @@
 
 // Displays a process node
 void displayProcessNode(ProcessNode* node) {
-  printf("(%d, %d)", node->CPUTime, node->IORequest);
+  printf("(%d, %s)", node->CPUTime, ioNameAsString(node->IORequest));
 }
 
 // Displays all information about a process
