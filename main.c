@@ -5,6 +5,7 @@
 #include "options.h"
 #include "process.h"
 #include "scheduler.h"
+#include "display.h"
 
 // Quickly test some of the implemented functionality
 void testQueue(){
@@ -61,9 +62,16 @@ int main(int argc, char** argv){
   bool done = false;
   int time = 0;
   SchedulerState state = initialState(e);
+  //TODO: Add this option to command line argument logic
+  bool displayStatesOption = 1;
   while (!done) {
     done = schedulingStep(&state, opt, time);
-    time++;
+    if (displayStatesOption) {
+      displaySchedulerState(&state, time);
+      printf("\n     [Press any key to continue]\n");
+      getc(stdin);
+      time++;
+    }
   }
 
   // printf("Scheduling done in %d units of time\n", time);

@@ -103,34 +103,6 @@ Process* deQueueProcess(ProcessQueue* queue) {
   return process;
 }
 
-void displayProcessNode(ProcessNode* node) {
-  printf("(%d, %d)", node->CPUTime, node->IORequest);
-}
-
-void displayProcess(Process* process) {
-  printf("\nPID: %d\n[", process->PID);
-  ProcessNode* currentNode = process->firstNode;
-  while (currentNode != NULL) {
-    displayProcessNode(currentNode);
-    currentNode = currentNode->nextNode;
-  }
-  printf("]\n");
-}
-
-void displayProcessQueue(ProcessQueue* queue) {
-  printf("Queue:\n\n");
-  QueueNode* currentNode = queue->head;
-  int i = 0;
-  while(currentNode != NULL) {
-    printf("[%d]:\n", i);
-    displayProcess(currentNode->process);
-    currentNode = currentNode->nextQueueNode;
-    printf("\n");
-  }
-  printf("End of queue.\n\n");
-}
-
-
 
 
 

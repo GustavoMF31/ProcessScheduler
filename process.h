@@ -41,7 +41,6 @@ typedef struct ProcessQueue {
   QueueNode* head;
 } ProcessQueue;
 
-
 // Returns whether a process that requested a specific kind of IO
 // should return to the high priority queue. Assumes type != NONE,
 // as a "NONE" IO cannot be requested.
@@ -57,7 +56,6 @@ char* ioNameAsString(IOType type);
 // 1 if the node was the first added to the process
 // 2 if the node was added to the end of an existing chain
 int addProcessNode(Process *process, int CPUTime, IOType IORequest); 
-
 
 // Creates an empty process with given PID and name and returns:
 // NULL if an error occurred
@@ -80,13 +78,3 @@ int enQueueProcess(Process* process, ProcessQueue* queue);
 // a pointer to the process removed from the queue otherwise 
 Process* deQueueProcess(ProcessQueue* queue);
 
-// Functions for testing ----------------------------------------------------------------
-
-// Displays a single process node
-void displayProcessNode(ProcessNode* node);
-
-// Displays all information about a process
-void displayProcess(Process* process);
-
-// Displays all the processes in a process queue
-void displayProcessQueue(ProcessQueue* queue);
