@@ -19,12 +19,14 @@ SchedulerState initialState(EventQueue *q){
 // priority queue available
 void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
   state->executing = deQueueProcess(state->highPriority);
-  state->executing == NULL ? printf("No high priority process\n"):printf("Process %d entered high priority queue\n", state->executing->PID);
-  if (state->executing == NULL) { 
+  if (state->executing == NULL) {
     state->executing = deQueueProcess(state->lowPriority);
-    state->executing == NULL ? printf("No process to load.\n"):printf("Process %d entered low priority queue\n", state->executing->PID);
-    return;
+    if (state->executing == NULL) return;
+    printf("Process %d entered low priority queue\n", state->executing->PID);
+  } else {
+    printf("Process %d entered high priority queue\n", state->executing->PID);
   }
+  
 
   state->executing->timeSlicesUsed++;
 
