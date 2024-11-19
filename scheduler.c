@@ -22,9 +22,9 @@ void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
   if (state->executing == NULL) {
     state->executing = deQueueProcess(state->lowPriority);
     if (state->executing == NULL) return;
-    printf("Process %d entered low priority queue\n", state->executing->PID);
+    printf("Process %d entered the low priority queue\n", state->executing->PID);
   } else {
-    printf("Process %d entered high priority queue\n", state->executing->PID);
+    printf("Process %d entered the high priority queue\n", state->executing->PID);
   }
   
 
