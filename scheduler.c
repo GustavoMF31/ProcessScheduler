@@ -19,8 +19,12 @@ SchedulerState initialState(EventQueue *q){
 // priority queue available
 void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
   state->executing = deQueueProcess(state->highPriority);
-  if (state->executing == NULL) state->executing = deQueueProcess(state->lowPriority);
-  if (state->executing == NULL) return;
+  state->executing == NULL ? printf("No high priority process\n"):printf("Process %d entered high priority queue\n", state->executing->PID);
+  if (state->executing == NULL) { 
+    state->executing = deQueueProcess(state->lowPriority);
+    state->executing == NULL ? printf("No process to load.\n"):printf("Process %d entered low priority queue\n", state->executing->PID);
+    return;
+  }
 
   state->executing->timeSlicesUsed++;
 
@@ -36,7 +40,10 @@ void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
 // returning true if no work was done
 bool stepProcessExecution(SchedulerState *state, SchedulingOptions opt, int time){
   // If there is no currently executing process, there is nothing to be done
-  if (state->executing == NULL) return true;
+  if (state->executing == NULL) {
+    printf("No process executing\n");
+    return true;
+  }
 
   int remainingTime = --state->executing->firstNode->CPUTime;
   if (remainingTime > 0) return false;
@@ -58,17 +65,10 @@ bool stepProcessExecution(SchedulerState *state, SchedulingOptions opt, int time
   } else {
     printf("Process %d has finished execution\n", state->executing->PID);
 
-    // In case o a process finishing its execution, make sure
+    // In case of a process finishing its execution, make sure
     // any remaining node is free and, finally, free the process per se
-    Process* finishedProcess = state->executing;
-    ProcessNode* currentNode = NULL;
-    ProcessNode* nextNode = finishedProcess->firstNode;
-    while (nextNode != NULL) {
-      currentNode = nextNode;
-      nextNode = nextNode->nextNode;
-      free(currentNode);
-    }
-    free(finishedProcess);
+    free(state->executing->firstNode);
+    free(state->executing);
   }
 
   // Now we try to bring the next process to execute
@@ -106,9 +106,10 @@ bool handleNextEvents(SchedulerState *state, SchedulingOptions opt, int time){
           printf("Process %d has finished execution\n", event.blockedProcess->PID);
           break;
         }
+        printf("Process %d finished its IO\n", event.blockedProcess->PID);
         ProcessQueue* q = hasPriority(event.ioType) ? state->highPriority : state->lowPriority;
         enQueueProcess(event.blockedProcess, q);
-        printf("Process %d finished its IO\n", event.blockedProcess->PID);
+        if (state->executing == NULL) loadNextProcess(state, opt, time);
         break;
       default:
         printf("Invalid event type found in handleNextEvent\n");

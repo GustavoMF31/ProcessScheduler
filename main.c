@@ -67,7 +67,7 @@ int main(int argc, char** argv){
     done = schedulingStep(&state, opt, time);
     if (opt.showSteps) {
       displaySchedulerState(&state, time);
-      printf("\n     [Press any key to continue]\n");
+      printf("\n     [Press Enter to continue]\n");
       getc(stdin);
     }
     time++;
