@@ -9,6 +9,15 @@
 #include "scheduler.h"
 #include "display.h"
 
+// Command to clear screen on different operating systems
+#ifdef _WIN32
+  #define CLEAR_SCREEN "cls"
+#endif
+
+#ifdef __linux__
+  #define CLEAR_SCREEN "clear"
+#endif
+
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -106,7 +115,7 @@ void displayIOList(IOType io, SchedulerState* state, int currentTime) {
 // and shows all the processes that are currently executing each type of I/O
 void displaySchedulerState(SchedulerState* state, int currentTime) {
   // Clears the terminal
-  system("clear");
+  system(CLEAR_SCREEN);
 
   // Size of each separating line
   int n = 50;

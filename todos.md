@@ -5,5 +5,4 @@
 
 # Código
 
-- Diretiva de preprocessamento para diferenciar o sistema operacional e usar argumentos diferentes da função system()
 
