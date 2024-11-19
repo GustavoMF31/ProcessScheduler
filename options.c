@@ -20,9 +20,10 @@ int readPosIntArg(char* argName, int* dest, int argc, char** argv, int i){
 }
 
 // Attemps to read a specific argument name from the i-th position of argv.
-// Returns whether the argument read matches the wanted argument (1 or 0).
+// Returns whether the argument read matches the wanted argument (1 or 0), writing the result to *dest.
 int readBoolArg(char* argName, bool* dest, int argc, char** argv, int i) {
-  return *dest = strcmp(argv[i], argName) == 0;
+  if (strcmp(argv[i], argName) == 0) *dest = true;
+  return *dest;
 } 
 
 // Reads the scheduling options from the command line arguments and writes them
@@ -41,11 +42,11 @@ bool parseArgs(SchedulingOptions *opt, int argc, char** argv) {
 
     int j = i; 
 
-    i += readPosIntArg("--time"   , &opt->timeSlice  , argc, argv, i);
-    i += readPosIntArg("--disk"   , &opt->diskTime   , argc, argv, i); 
-    i += readPosIntArg("--tape"   , &opt->tapeTime   , argc, argv, i); 
-    i += readPosIntArg("--printer", &opt->printerTime, argc, argv, i);
-    i +=   readBoolArg("--steps"  , &opt->showSteps  , argc, argv, i); 
+    i += readPosIntArg("--time"   , &opt->timeSlice  , argc, argv, j);
+    i += readPosIntArg("--disk"   , &opt->diskTime   , argc, argv, j); 
+    i += readPosIntArg("--tape"   , &opt->tapeTime   , argc, argv, j); 
+    i += readPosIntArg("--printer", &opt->printerTime, argc, argv, j);
+    i +=   readBoolArg("--steps"  , &opt->showSteps  , argc, argv, j); 
 
     if (i == j) return false;
   }
