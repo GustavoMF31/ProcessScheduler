@@ -43,7 +43,6 @@ void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
 bool stepProcessExecution(SchedulerState *state, SchedulingOptions opt, int time){
   // If there is no currently executing process, there is nothing to be done
   if (state->executing == NULL) {
-    printf("No process executing\n");
     return true;
   }
 
