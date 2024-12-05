@@ -22,9 +22,9 @@ void loadNextProcess(SchedulerState *state, SchedulingOptions opt, int time){
   if (state->executing == NULL) {
     state->executing = deQueueProcess(state->lowPriority);
     if (state->executing == NULL) return;
-    printf("Process %d entered the low priority queue\n", state->executing->PID);
+    printf("Process %d left the low priority queue\n", state->executing->PID);
   } else {
-    printf("Process %d entered the high priority queue\n", state->executing->PID);
+    printf("Process %d left the high priority queue\n", state->executing->PID);
   }
   
 
@@ -91,6 +91,7 @@ bool handleNextEvents(SchedulerState *state, SchedulingOptions opt, int time){
     switch (event.type) {
       case NEW_PROCESS:
         printf("New process with PID %d\n", event.newProcess->PID);
+        printf("Process %d entered the high priority queue\n", event.newProcess->PID);
         enQueueProcess(event.newProcess, state->highPriority);
         if (state->executing == NULL) loadNextProcess(state, opt, time);
         break;
@@ -99,6 +100,7 @@ bool handleNextEvents(SchedulerState *state, SchedulingOptions opt, int time){
         if (state->executing->PID != event.processToPreempt) break;
         if (state->executing->timeSlicesUsed != event.timeSlicesUsed) break;
         printf("Preempted process %d\n", state->executing->PID);
+        printf("Process %d entered the low priority queue\n", state->executing->PID);
         enQueueProcess(state->executing, state->lowPriority);
         loadNextProcess(state, opt, time);
         break;
@@ -109,6 +111,8 @@ bool handleNextEvents(SchedulerState *state, SchedulingOptions opt, int time){
         }
         printf("Process %d finished its IO\n", event.blockedProcess->PID);
         ProcessQueue* q = hasPriority(event.ioType) ? state->highPriority : state->lowPriority;
+        char *queueName = hasPriority(event.ioType) ? "high priority" : "low priority";
+        printf("Process %d has entered the %s queue\n", event.blockedProcess->PID, queueName);
         enQueueProcess(event.blockedProcess, q);
         if (state->executing == NULL) loadNextProcess(state, opt, time);
         break;
